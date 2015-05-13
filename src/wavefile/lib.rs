@@ -149,21 +149,12 @@ impl Read for FormatChunk {
 			offset = 4;
 			
 			do_transmute!(u32_to_u8, self.size_wave_chunk, &mut tmb, &mut offset, 4);
-			//do_transmute_u32_to_u8(self.size_wave_chunk, &mut transmutebuf);
-			//offset = offset + append_bytes( &transmutebuf, buf, offset);
-			//transmutebuf = [0; 8];
 			do_transmute!(u16_to_u8, self.wave_type_format, &mut tmb, &mut offset, 2);
-			//offset = offset + append_bytes( do_transmute_u16_to_u8(&self.wave_type_format), buf, offset);
 			do_transmute!(u16_to_u8, self.number_channels, &mut tmb, &mut offset, 2);
-			//offset = offset + append_bytes( do_transmute_u16_to_u8(&self.number_channels), buf, offset);
 			do_transmute!(u32_to_u8, self.samples_second, &mut tmb, &mut offset, 4);
-			//offset = offset + append_bytes( do_transmute_u32_to_u8(&self.samples_second), buf, offset);
 			do_transmute!(u32_to_u8, self.bytes_second, &mut tmb, &mut offset, 4);
-			//offset = offset + append_bytes( do_transmute_u32_to_u8(&self.bytes_second), buf, offset);
 			do_transmute!(u16_to_u8, self.block_alignment, &mut tmb, &mut offset, 2);
-			//offset = offset + append_bytes( do_transmute_u16_to_u8(&self.block_alignment), buf, offset);
 			do_transmute!(u16_to_u8, self.bits_sample, &mut tmb, &mut offset, 2);
-			//offset = offset + append_bytes( do_transmute_u16_to_u8(&self.bits_sample), buf, offset);
 			append_bytes(&tmb, buf, 0);
 		}
 		Ok(offset)

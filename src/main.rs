@@ -74,17 +74,14 @@ fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample
 }
 
 fn main() {
-    //let mut x: WaveFileHeader = Default::default();
-    //println!("{:?} ", x);
-    //let x = create_sine_sample(440.0f64, 44100);
     let y = generate_tone(1.0f64, 440.0f64, 44100, 32);
     let mut x = create_mono_wave_file(y, 44100, 32);
     let mut z: Vec<u8> = Vec::new();
     
-    let q = x.header.read_to_end(&mut z);
+    let _ = x.header.read_to_end(&mut z);
     println!("header - {:?} ", z);
     z.clear();
-    let q = x.format_chunk.read_to_end(&mut z);
+    let _ = x.format_chunk.read_to_end(&mut z);
     println!("fmt - {:?} ", z);
     
     
