@@ -1,0 +1,10 @@
+[package]
+
+name = "wavout"
+version = "0.0.1"
+authors = [ "Ryan Drew <rsdrew@gmail.com>" ]
+
+[lib]
+
+name = "wavout"
+path = "lib.rs"

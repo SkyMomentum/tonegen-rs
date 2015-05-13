@@ -1,0 +1,12 @@
+[package]
+
+name = "Tone Generator"
+version = "0.0.1"
+authors = [ "Ryan Drew <rsdrew@gmail.com>" ]
+
+[[bin]]
+
+name = "tonegen"
+
+[dependencies.wavout]
+path = "src/wavefile"
