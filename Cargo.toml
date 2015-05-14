@@ -10,3 +10,6 @@ name = "tonegen"
 
 [dependencies.wavout]
 path = "src/wavefile"
+
+[dependencies]
+rand = "0.3"

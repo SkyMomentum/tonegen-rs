@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 extern crate wavout;
+extern crate rand;
 
 use wavout::{F32Sample, DataChunk, FormatChunk, WaveHeader, WaveFile};
 
@@ -79,6 +80,53 @@ fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample
     let wave: WaveFile<F32Sample> = WaveFile::create_new(hdr,fmt,data_in);
     wave
 }
+
+struct KarplusStrong {
+    ring: Vec<F32Sample>,
+    ring_first: usize,
+    ring_last: usize,
+    ring_size: usize,
+    
+    sample_rate: f64,
+    frequency: f64,
+    ticks: u64,
+}
+
+impl KarplusStrong {
+    fn with_ring_size(size: usize) -> KarplusStrong {
+        KarplusStrong {
+            ring: Vec::with_capacity(size),
+            ring_first: 0,
+            ring_last: size
+            sample_rate: 44100.0f64
+            frequency: 0,
+            ticks: 0,
+        }
+    }
+    
+    fn set_frequency(&mut self, freq: f64) {
+        self.frequency = freq;
+        //if freq requires a longer Vec, reallocate
+        //
+    }
+    
+    fn pluck(&mut self) {
+       // Fill self.ring with random noise in range -0.5 to +0.5     
+    }
+    
+    fn sample(&mut self) -> F32Sample {
+        
+    }
+    
+    fn tick_simulation(&mut self) {
+        
+    }
+    
+    fn get_tick(&mut self) {
+        
+    }
+}
+
 
 fn main() {
     use std::io::copy;
