@@ -6,7 +6,7 @@ extern crate wavout;
 
 use wavout::{F32Sample, DataChunk, FormatChunk, WaveHeader, WaveFile};
 
-
+/// Fill a Vec<> with a single cycle at frequency and sample rate.
 fn create_sine_sample(frequency: f64, sample_rate: u32) -> Vec<F32Sample> {
 
     let sr: f64 = sample_rate as f64;
@@ -26,6 +26,9 @@ fn create_sine_sample(frequency: f64, sample_rate: u32) -> Vec<F32Sample> {
     tone_cycle
 }
 
+/// Create a data chunk with specified run length, frequency, and sample details.
+///
+/// Current support functions only provide 32bit sample size.
 fn generate_tone(run_length: f64, frequency: f64, sample_rate: u32, sample_bits: u32) -> DataChunk<F32Sample> {
 
     let mut tone_out: DataChunk<F32Sample> = Default::default();
@@ -52,6 +55,9 @@ fn generate_tone(run_length: f64, frequency: f64, sample_rate: u32, sample_bits:
     tone_out
 }
 
+/// Function to package provided Datachunk as a mono .wav struct.
+///
+/// Current support functions only provide 32bit sample size.
 fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample_bits: u32) -> WaveFile<F32Sample> {
 
     let format_chunk_size = 24u32;
