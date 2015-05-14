@@ -1,0 +1,2 @@
+Library for Basic .wav file operations.
+5/13/2015 - 0.1.0 - Structs and their Read impls for outputting 32b .wav files.
