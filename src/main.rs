@@ -77,7 +77,7 @@ fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample
 fn main() {
 	use std::io::copy;
 	
-    let y = generate_tone(1.0f64, 440.0f64, 44100, 32);
+    let y = generate_tone(2.0f64, 440.0f64, 44100, 32);
     let mut x = create_mono_wave_file(y, 44100, 32);
     //let mut z: Vec<u8> = Vec::new();
     
@@ -87,7 +87,7 @@ fn main() {
     let _ = x.format_chunk.read_to_end(&mut z);
     println!("fmt - {:?} ", z);*/
     
-    let mut f = File::create("test.wav").unwrap();
+    let mut f = File::create("test_440.wav").unwrap();
     
     //try!( f.write_all( x.header.read_to_end()));
     let _ = copy( &mut x.header, &mut f);

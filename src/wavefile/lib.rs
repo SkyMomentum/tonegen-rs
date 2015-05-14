@@ -58,7 +58,6 @@ macro_rules! do_transmute {
 			let mut transmutebuf: [u8; $size] = [0; $size];
 			$fnc($input, &mut transmutebuf);
 			*$offset = *$offset + append_bytes( &transmutebuf, $to_buf, *$offset);
-			//transmutebuf = [0; $size];
 		});
 }
 
@@ -178,8 +177,8 @@ impl Read for WaveHeader {
 		if buf.len() >= 12 {
 			zero_u8_array(buf);
 			let mut tmb: [u8; 13] = [0; 13];
-			//tmb[12] = 4u8;
 			let mut off: usize = 4;
+			
 			for i in 0 .. 4 {
 				let x = i + 8;
 				tmb[i] = self.riff_header[i];
@@ -203,14 +202,9 @@ impl Read for DataChunk<F32Sample> {
 		let mut off: usize = 0;
 		let mut x: usize = 0;
 		
-		
-		//if self.read_cur > 0 { off = self.read_cur; println!("Ping");}
 		if self.read_cur >= out_size { return Ok(0); }
-		println!("A - sd-{} os-{} off-{} rc-{} bl-{}", self.size_data, out_size, off, self.read_cur, buf.len());
 		if buf.len() > 8 {
-			println!("Ping B");
 			if self.read_cur == 0 {
-				println!("Ping C");
 				zero_u8_array(buf);
 				for i in 0 .. 4 {
 					buf[i] = self.data_header[i];
@@ -218,26 +212,22 @@ impl Read for DataChunk<F32Sample> {
 				off = 4;
 				do_transmute!(u32_to_u8, self.size_data, &mut tmb, &mut x, 4);
 				off = off + append_bytes(&tmb, buf, off);
-				println!("C - sd-{} os-{} off-{} rc-{} bl-{}", self.size_data,out_size, off, self.read_cur, buf.len());
 			}
 			
-			println!("B - sd-{} os-{} off-{} rc-{} bl-{}", self.size_data,out_size, off, self.read_cur, buf.len());
 			let (_, work_slice) = self.sample_vector.split_at( self.read_cur / 4 );
-			//for fl in self.sample_vector.iter() {
+
 			for fl in work_slice {
 				println!("fl {}", fl);
 				x = 0;
 				do_transmute!(f32_to_u8, *fl, &mut tmb, &mut x, 4);
 				if (off + 4) < buf.len() {
 					off = off + append_bytes(&tmb, buf, off);
-					//println!("sd-{} os-{} off-{} rc-{}", self.size_data,out_size, off, self.read_cur);
 				} else {
 					self.read_cur = self.read_cur + off;
 					return Ok(off);
 				}
 			}
 			self.read_cur = self.read_cur + off;
-			println!("Ping D");
 			Ok(off)
 		} else {
 			Err( Error::new(ErrorKind::Other, "Insufficent buffer availible.") )
