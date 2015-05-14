@@ -7,6 +7,7 @@ pub struct WaveHeader {
 	riff_header: [u8; 4], // "RIFF"
 	file_size: u32,
 	wave_header: [u8; 4], // "WAVE"
+	read_cur: usize,
 }
 
 #[derive(Debug)]
@@ -19,6 +20,7 @@ pub struct FormatChunk {
 	bytes_second: u32,
 	block_alignment: u16,
 	bits_sample: u16,
+	read_cur: usize,
 }
 
 #[derive(Debug)]
@@ -26,6 +28,7 @@ pub struct DataChunk<T> {
 	data_header: [u8; 4], // "data"
 	size_data: u32,
 	sample_vector: Vec<T>,
+	read_cur: usize,
 }
 
 #[derive(Debug)]
@@ -99,6 +102,7 @@ impl Default for WaveHeader {
 			riff_header: [b'R', b'I', b'F', b'F'],
 			file_size: 0,
 			wave_header: [b'W', b'A', b'V', b'E'],
+			read_cur: 0,
 		}
 	}
 }
@@ -124,7 +128,7 @@ impl FormatChunk {
 impl Default for FormatChunk {
 	fn default() -> FormatChunk {
 		FormatChunk {
-			fmt_header: [b'F', b'M', b'T', b' '],
+			fmt_header: [b'f', b'm', b't', b' '],
 			size_wave_chunk: 16,
 			wave_type_format: 1,
 			number_channels: 1,
@@ -132,12 +136,16 @@ impl Default for FormatChunk {
 			bytes_second: 0,
 			block_alignment: 0,
 			bits_sample: 32, //defaulting to F32Sample
+			read_cur: 0,
 		}
 	}
 }
 
 impl Read for FormatChunk {
 	fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
+		
+		if self.read_cur >= 12 { return Ok(0); }
+		
 		let mut offset: usize = 0;
 		let mut tmb: [u8; 24] = [0; 24];
 		
@@ -148,7 +156,7 @@ impl Read for FormatChunk {
 			}
 			offset = 4;
 			
-			do_transmute!(u32_to_u8, self.size_wave_chunk, &mut tmb, &mut offset, 4);
+			do_transmute!(u32_to_u8, self.size_wave_chunk, &mut tmb, &mut offset, 4); 
 			do_transmute!(u16_to_u8, self.wave_type_format, &mut tmb, &mut offset, 2);
 			do_transmute!(u16_to_u8, self.number_channels, &mut tmb, &mut offset, 2);
 			do_transmute!(u32_to_u8, self.samples_second, &mut tmb, &mut offset, 4);
@@ -157,15 +165,20 @@ impl Read for FormatChunk {
 			do_transmute!(u16_to_u8, self.bits_sample, &mut tmb, &mut offset, 2);
 			append_bytes(&tmb, buf, 0);
 		}
+		self.read_cur = offset;
 		Ok(offset)
 	}
 }
 
 impl Read for WaveHeader {
 	fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
+		
+		if self.read_cur >= 12 { return Ok(0); }
+		
 		if buf.len() >= 12 {
 			zero_u8_array(buf);
-			let mut tmb: [u8; 12] = [0; 12];
+			let mut tmb: [u8; 13] = [0; 13];
+			//tmb[12] = 4u8;
 			let mut off: usize = 4;
 			for i in 0 .. 4 {
 				let x = i + 8;
@@ -173,9 +186,10 @@ impl Read for WaveHeader {
 				tmb[x] = self.wave_header[i];
 			}
 			do_transmute!(u32_to_u8, self.file_size, &mut tmb, &mut off, 4); 
-			println!("A - {:?}", tmb);
 			append_bytes(&tmb, buf, 0);
-			Ok(12)
+			off=12;
+			self.read_cur = off;
+			Ok(off)
 		} else {
 			Err( Error::new(ErrorKind::Other, "Insufficent buffer availible.") )
 		}
@@ -184,26 +198,46 @@ impl Read for WaveHeader {
 
 impl Read for DataChunk<F32Sample> {
 	fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
-		let out_size = self.size_data + 4;
+		let out_size: usize = self.size_data as usize + 4;
 		let mut tmb: [u8; 4] = [0; 4];
 		let mut off: usize = 0;
 		let mut x: usize = 0;
-		if out_size as usize > buf.len() {
-			zero_u8_array(buf);
-			for i in 0 .. 3 {
-				buf[i] = self.data_header[i];
-			}
-			off = 4;
-			do_transmute!(u32_to_u8, self.size_data, &mut tmb, &mut x, 4);
-			off = off + append_bytes(&tmb, buf, off);
-			for fl in self.sample_vector.iter() {
-				do_transmute!(f32_to_u8, *fl, &mut tmb, &mut x, 4);
-				if (off + 4) > buf.len() {
-					off = off + append_bytes(&tmb, buf, off);
-				} else {
-					return Err( Error::new(ErrorKind::Other, "Insufficent buffer availible.") );
+		
+		
+		//if self.read_cur > 0 { off = self.read_cur; println!("Ping");}
+		if self.read_cur >= out_size { return Ok(0); }
+		println!("A - sd-{} os-{} off-{} rc-{} bl-{}", self.size_data, out_size, off, self.read_cur, buf.len());
+		if buf.len() > 8 {
+			println!("Ping B");
+			if self.read_cur == 0 {
+				println!("Ping C");
+				zero_u8_array(buf);
+				for i in 0 .. 4 {
+					buf[i] = self.data_header[i];
 				}
-			} 
+				off = 4;
+				do_transmute!(u32_to_u8, self.size_data, &mut tmb, &mut x, 4);
+				off = off + append_bytes(&tmb, buf, off);
+				println!("C - sd-{} os-{} off-{} rc-{} bl-{}", self.size_data,out_size, off, self.read_cur, buf.len());
+			}
+			
+			println!("B - sd-{} os-{} off-{} rc-{} bl-{}", self.size_data,out_size, off, self.read_cur, buf.len());
+			let (_, work_slice) = self.sample_vector.split_at( self.read_cur / 4 );
+			//for fl in self.sample_vector.iter() {
+			for fl in work_slice {
+				println!("fl {}", fl);
+				x = 0;
+				do_transmute!(f32_to_u8, *fl, &mut tmb, &mut x, 4);
+				if (off + 4) < buf.len() {
+					off = off + append_bytes(&tmb, buf, off);
+					//println!("sd-{} os-{} off-{} rc-{}", self.size_data,out_size, off, self.read_cur);
+				} else {
+					self.read_cur = self.read_cur + off;
+					return Ok(off);
+				}
+			}
+			self.read_cur = self.read_cur + off;
+			println!("Ping D");
 			Ok(off)
 		} else {
 			Err( Error::new(ErrorKind::Other, "Insufficent buffer availible.") )
@@ -226,9 +260,10 @@ impl DataChunk<F32Sample> {
 impl Default for DataChunk<F32Sample> {
 	fn default() -> DataChunk<F32Sample> {
 		DataChunk {
-			data_header: [b'D', b'A', b'T', b'A'],
+			data_header: [b'd', b'a', b't', b'a'],
 			size_data: 0,
 			sample_vector: Vec::new(),
+			read_cur: 0,
 		}
 	}
 }
