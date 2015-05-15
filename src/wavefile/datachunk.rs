@@ -143,12 +143,36 @@ pub fn create_stereo_datachunk(one: Vec<F32Sample>, two: Vec<F32Sample>) -> Data
 #[cfg(test)]
 mod tests {
     use super::*;
-    
-    fn create_mono_datachunk_test_01() {
-        let payload = [0.0f32, 0.1f32, 0.2f32, 0.3f32, 0.4f32, 0.5f32]; 
-        let mut dat: Vec<f32> = Vec::new();
-        dat.push_all(&payload);
 
-        let retv = create_mono_datachunk(dat);
+    #[test]
+    fn create_mono_datachunk_test_01() {
+        // This probably does more than test create_mono... oh well.
+        use std::io::copy;
+        use std::io::Read;
+        use super::super::util;
+
+        // Setup a test payload, then convert it to a u8 array to compare against.
+        let payload = [0.0f32, 0.1f32, 0.2f32, 0.3f32, 0.4f32, 0.5f32];
+        let mut expected: [u8; 32] = [0;32];
+        let mut x: usize = 4;
+        expected[0] = b'D'; expected[1] = b'A'; expected[2] = b'T'; expected[3] = b'A';
+        do_transmute!(u32_to_u8, 24, &mut expected, &mut x, 4);
+        for j in payload.iter() {
+            do_transmute!(f32_to_u8, *j, &mut expected, &mut x, 4);
+        }
+
+        // Setup audio sample vector.
+        let mut dat: Vec<f32> = Vec::new();
+        for x in payload.iter() {
+            dat.push(*x);
+        }
+
+        // Finally call tested function then compare to expected.
+        let mut rbuf: [u8; 32] = [0; 32];
+        let mut retv = create_mono_datachunk(dat);
+        retv.read(&mut rbuf);
+        for i in 0 .. payload.len() {
+            assert_eq!(rbuf[i], expected[i]);
+        }
     }
 }
