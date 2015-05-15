@@ -24,7 +24,7 @@ pub fn create_sine_sample(frequency: f64, sample_rate: u32) -> Vec<f32> {
 /// Create a data chunk with specified run length, frequency, and sample details.
 ///
 /// Current support functions only provide 32bit sample size.
-fn generate_tone_f32(run_length: f64, frequency: f64, sample_rate: u32) -> Vec<f32> {
+pub fn generate_tone_f32(run_length: f64, frequency: f64, sample_rate: u32) -> Vec<f32> {
 
     let mut tone_out: Vec<f32> = Vec::new();
 
