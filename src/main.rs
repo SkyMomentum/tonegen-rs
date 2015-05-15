@@ -8,7 +8,7 @@ mod synth;
 use synth::ksstring::KarplusStrong;
 
 fn main() {
-    let mut ks: KarplusStrong = KarplusStrong::with_frequency(440.0f64);
+    let mut ks: KarplusStrong = KarplusStrong::with_frequency(440.0f64, 44100.0f64);
     
     ks.pluck();
     

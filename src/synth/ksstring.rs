@@ -24,8 +24,7 @@ impl KarplusStrong {
         }
     }
 
-    pub fn with_frequency(freq: f64) -> KarplusStrong {
-        let sample_rate = 44100.0f64;
+    pub fn with_frequency(freq: f64, sample_rate: f64) -> KarplusStrong {
         let size = (sample_rate / freq).round() as usize;
         let mut ks = KarplusStrong {
             ring: Vec::new(),
@@ -104,3 +103,19 @@ impl KarplusStrong {
     }
 }
 
+pub fn generate_one_pluck_sample(run_length: f64, frequency: f64, sample_rate: f64) -> Vec<f32> {
+    let mut ks: KarplusStrong = KarplusStrong::with_frequency(frequency, sample_rate);
+    
+    ks.pluck();
+    
+    let num_samples: u32 = (sample_rate * run_length).round() as u32;
+    let mut out_vec: Vec<f32> = Vec::with_capacity(num_samples as usize);
+    let mut i = 0;
+    loop {
+        ks.tick_simulation();
+        if i > num_samples { break; }
+        out_vec.push( ks.sample() );
+        i = i + 1;
+    }
+    out_vec
+}
