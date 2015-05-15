@@ -17,7 +17,7 @@ pub use datachunk::DataChunk;
 /// Artifact of thinking about packing the component structs then using unsafe mem operations to
 /// write directly to disk. Instead implemented Read on component types.
 #[derive(Debug)]
-pub struct WaveFile<T> {
+pub struct Wav<T> {
     pub header: WavHeader,
     pub format_chunk: FormatChunk,
     pub data: DataChunk<T>,
@@ -28,17 +28,17 @@ pub type F32Sample = f32;
 
 //-------------------------------------------------
 
-impl WaveFile<F32Sample> {
-    /// Helper to create a new WaveFile of F32Samples.
-    pub fn create_new( hdr: WavHeader, fmt: FormatChunk, data_in: DataChunk<F32Sample>) -> WaveFile<F32Sample> {
-        WaveFile { header: hdr, format_chunk: fmt, data: data_in, }
+impl Wav<F32Sample> {
+    /// Helper to create a new Wav of F32Samples.
+    pub fn create_new( hdr: WavHeader, fmt: FormatChunk, data_in: DataChunk<F32Sample>) -> Wav<F32Sample> {
+        Wav { header: hdr, format_chunk: fmt, data: data_in, }
     }
 }
 
 /// Function to package provided Datachunk as a mono .wav struct.
 ///
 /// Current support functions only provide 32bit sample size.
-fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample_bits: u32) -> WaveFile<F32Sample> {
+fn create_mono_wavfile(data_in: DataChunk<F32Sample>, sample_rate: u32, sample_bits: u32) -> Wav<F32Sample> {
 
     let format_chunk_size = 24u32;
     let data_chunk_header_size = 8u32;
@@ -56,6 +56,6 @@ fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample
     let mut hdr: WavHeader = Default::default();
     hdr.set_size(total_size);
 
-    let wave: WaveFile<F32Sample> = WaveFile::create_new(hdr,fmt,data_in);
+    let wave: Wav<F32Sample> = Wav::create_new(hdr,fmt,data_in);
     wave
 }
