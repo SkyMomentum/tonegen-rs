@@ -80,7 +80,7 @@ impl KarplusStrong {
 
     pub fn tick_simulation(&mut self) {
         let next_index = self.ring_first + 1;
-        let mut second: f32 = 0.0f32;
+        let mut second: f32;
         // Block to allow borrowing ring twice.
         {
             let sr: &f32 = self.ring.get(next_index).unwrap();

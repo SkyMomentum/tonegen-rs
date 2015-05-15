@@ -28,7 +28,6 @@ pub struct WaveFile<T> {
 /// Alias for only currently supported sample type.
 pub type F32Sample = f32;
 
-
 //-------------------------------------------------
 
 impl WaveFile<F32Sample> {
@@ -63,3 +62,39 @@ fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample
     wave
 }
 
+fn create_mono_datachunk(data: Vec<F32Sample>) -> DataChunk<F32Sample>{
+    let mut dc: DataChunk<F32Sample> = Default::default();
+    
+    for x in data.iter() {
+        dc.push_sample(*x);
+    }
+    let mut len: u32;
+    {
+        len = dc.len() as u32;
+        len = len * 4;
+    }
+    dc.set_size(len);
+    dc
+}
+
+fn create_stereo_datachunk(one: Vec<F32Sample>, two: Vec<F32Sample>) -> DataChunk<F32Sample> {
+    use std::iter::Iterator;
+    
+    let mut dc: DataChunk<F32Sample> = Default::default();
+    
+    let li = one.iter();
+    let ri = two.iter();
+    let stereo = li.zip(ri);
+    for x in stereo {
+        let (l,r) = x;
+        dc.push_sample(*l);
+        dc.push_sample(*r);
+    }
+    let mut len: u32;
+    {
+        len = dc.len() as u32;
+        len = len * 8;
+    }
+    dc.set_size(len);
+    dc
+}
