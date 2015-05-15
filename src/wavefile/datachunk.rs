@@ -2,10 +2,8 @@ use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::io::Result;
 
-#[macro_use]
-use util;
-
 use super::F32Sample;
+//#[macro_use]
 use util::{zero_u8_array, append_bytes};
 
 /// Struct for a data chunk of a .wav
@@ -102,5 +100,55 @@ impl Default for DataChunk<F32Sample> {
             sample_vector: Vec::new(),
             read_cur: 0,
         }
+    }
+}
+
+pub fn create_mono_datachunk(data: Vec<F32Sample>) -> DataChunk<F32Sample>{
+    let mut dc: DataChunk<F32Sample> = Default::default();
+    
+    for x in data.iter() {
+        dc.push_sample(*x);
+    }
+    let mut len: u32;
+    {
+        len = dc.len() as u32;
+        len = len * 4;
+    }
+    dc.set_size(len);
+    dc
+}
+
+pub fn create_stereo_datachunk(one: Vec<F32Sample>, two: Vec<F32Sample>) -> DataChunk<F32Sample> {
+    use std::iter::Iterator;
+    
+    let mut dc: DataChunk<F32Sample> = Default::default();
+    
+    let li = one.iter();
+    let ri = two.iter();
+    let stereo = li.zip(ri);
+    for x in stereo {
+        let (l,r) = x;
+        dc.push_sample(*l);
+        dc.push_sample(*r);
+    }
+    let mut len: u32;
+    {
+        len = dc.len() as u32;
+        len = len * 8;
+    }
+    dc.set_size(len);
+    dc
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    fn create_mono_datachunk_test_01() {
+        let payload = [0.0f32, 0.1f32, 0.2f32, 0.3f32, 0.4f32, 0.5f32]; 
+        let mut dat: Vec<f32> = Vec::new();
+        dat.push_all(&payload);
+
+        let retv = create_mono_datachunk(dat);
     }
 }

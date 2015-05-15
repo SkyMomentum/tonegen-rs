@@ -1,10 +1,7 @@
 use std::io::prelude::*;
-use std::io::{Error, ErrorKind};
 use std::io::Result;
 
-#[macro_use]
-use util;
-
+//#[macro_use]
 use util::{zero_u8_array, append_bytes};
 
 /// Struct for the format chunk of a .wav
