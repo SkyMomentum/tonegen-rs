@@ -1,4 +1,4 @@
-use wavout::F32Sample;
+use wavout::{F32Sample, DataChunk};
 use std::f64::consts;
 
 /// Fill a Vec<> with a single cycle at frequency and sample rate.

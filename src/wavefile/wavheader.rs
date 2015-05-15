@@ -1,3 +1,11 @@
+use std::io::prelude::*;
+use std::io::{Error, ErrorKind};
+use std::io::Result;
+
+#[macro_use]
+use util;
+
+use util::{zero_u8_array, append_bytes};
 
 /// Struct representing the header of a .wav
 /// 

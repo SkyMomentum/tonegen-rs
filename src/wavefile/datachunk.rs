@@ -1,3 +1,12 @@
+use std::io::prelude::*;
+use std::io::{Error, ErrorKind};
+use std::io::Result;
+
+#[macro_use]
+use util;
+
+use super::F32Sample;
+use util::{zero_u8_array, append_bytes};
 
 /// Struct for a data chunk of a .wav
 ///

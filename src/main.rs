@@ -4,10 +4,10 @@ use std::io::prelude::*;
 extern crate wavout;
 extern crate rand;
 
-use wavout::{F32Sample, DataChunk, FormatChunk, WaveHeader, WaveFile};
+use wavout::{F32Sample, DataChunk, FormatChunk, WavHeader, WaveFile};
 
 mod synth;
-
+use synth::ksstring::KarplusStrong;
 
 fn main() {
     use std::io::copy;

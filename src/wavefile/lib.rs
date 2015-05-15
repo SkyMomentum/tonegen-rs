@@ -2,16 +2,16 @@ use std::io::prelude::*;
 use std::io::Result;
 use std::io::{Error, ErrorKind};
 
-#[macro_use] mod macros;
+#[macro_use] mod util;
 
 mod formatchunk;
-use formatchunk::FormatChunk;
+pub use formatchunk::FormatChunk;
 
 mod wavheader;
-use wavheader::WavHeader;
+pub use wavheader::WavHeader;
 
 mod datachunk;
-use datachunk::DataChunk;
+pub use datachunk::DataChunk;
 
 
 /// Struct representing an overall .wav file with a single data chunk.
@@ -62,3 +62,4 @@ fn create_mono_wave_file(data_in: DataChunk<F32Sample>, sample_rate: u32, sample
     let wave: WaveFile<F32Sample> = WaveFile::create_new(hdr,fmt,data_in);
     wave
 }
+

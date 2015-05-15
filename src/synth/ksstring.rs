@@ -1,6 +1,6 @@
 use rand;
 
-struct KarplusStrong {
+pub struct KarplusStrong {
     ring: Vec<f32>,
     ring_first: usize,
     ring_last: usize,
@@ -24,7 +24,7 @@ impl KarplusStrong {
         }
     }
 
-    fn with_frequency(freq: f64) -> KarplusStrong {
+    pub fn with_frequency(freq: f64) -> KarplusStrong {
         let sample_rate = 44100.0f64;
         let size = (sample_rate / freq).round() as usize;
         let mut ks = KarplusStrong {
@@ -46,7 +46,7 @@ impl KarplusStrong {
         ks
     }
 
-    fn set_frequency(&mut self, freq: f64) {
+    pub fn set_frequency(&mut self, freq: f64) {
         self.frequency = freq;
         //if freq requires a longer Vec, reallocate
         self.ring_size = (self.sample_rate / self.frequency).round() as usize;
@@ -56,7 +56,7 @@ impl KarplusStrong {
         }
     }
 
-    fn pluck(&mut self) {
+    pub fn pluck(&mut self) {
         use rand::distributions::{IndependentSample, Range};
         // Fill self.ring with random noise in range -0.5 to +0.5
         let mut random: rand::OsRng = rand::OsRng::new().unwrap();
@@ -74,11 +74,11 @@ impl KarplusStrong {
 
     }
     
-    fn sample(&mut self) -> f32 {
+    pub fn sample(&mut self) -> f32 {
         *self.ring.get(self.ring_first).unwrap()
     }
 
-    fn tick_simulation(&mut self) {
+    pub fn tick_simulation(&mut self) {
         let next_index = self.ring_first + 1;
         let mut second: f32 = 0.0f32;
         // Block to allow borrowing ring twice.
@@ -95,11 +95,11 @@ impl KarplusStrong {
         self.ticks = self.ticks + 1;
     }
 
-    fn get_ticks(&mut self) -> u64 {
+    pub fn get_ticks(&mut self) -> u64 {
         self.ticks
     }
 
-    fn get_ring_size(&self) -> usize {
+    pub fn get_ring_size(&self) -> usize {
         self.ring_size
     }
 }
