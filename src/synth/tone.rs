@@ -32,8 +32,7 @@ pub fn generate_tone_f32(run_length: f64, frequency: f64, sample_rate: u32) -> V
     let cycle_len: usize = tone_cycle.len();
 
     let sr: f64 = sample_rate as f64;
-    let total_samples_f64: f64 = (run_length * sr).floor();
-    let total_samples: u32 =  total_samples_f64 as u32;
+    let total_samples: u32 = ((run_length * sr).floor()) as u32;
 
     let mut out_counter: u32 = 0;
     let mut cycle_index: usize = 0;
