@@ -1,0 +1,10 @@
+[package]
+
+name = "wavfile"
+version = "0.1.1"
+authors = [ "Ryan Drew <rsdrew@gmail.com>" ]
+
+[lib]
+
+name = "wavfile"
+path = "lib.rs"
