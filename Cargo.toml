@@ -8,8 +8,8 @@ authors = [ "Ryan Drew <rsdrew@gmail.com>" ]
 
 name = "tonegen"
 
-[dependencies.wavout]
-path = "src/wavefile"
+[dependencies.wavfile]
+path = "src/wavfile"
 
 [dependencies]
 rand = "0.3"

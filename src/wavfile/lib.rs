@@ -10,7 +10,7 @@ pub use wavheader::WavHeader;
 
 mod datachunk;
 pub use datachunk::DataChunk;
-
+pub use datachunk::create_mono_datachunk;
 
 /// Struct representing an overall .wav file with a single data chunk.
 ///
@@ -38,7 +38,7 @@ impl Wav<F32Sample> {
 /// Function to package provided Datachunk as a mono .wav struct.
 ///
 /// Current support functions only provide 32bit sample size.
-fn create_mono_wav(data_in: DataChunk<F32Sample>, sample_rate: u32, sample_bits: u32) -> Wav<F32Sample> {
+pub fn create_mono_wav(data_in: DataChunk<F32Sample>, sample_rate: u32, sample_bits: u32) -> Wav<F32Sample> {
 
     let format_chunk_size = 24u32;
     let data_chunk_header_size = 8u32;
