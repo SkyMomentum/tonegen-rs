@@ -43,7 +43,7 @@ fn main() {
                       .parse().ok().expect("Error: length parameter");
     let mut freq: f64 = matches.opt_str("frequency").expect("Error: frequency parameter")
                   .parse().ok().expect("Error: frequency parameter");
-    filename = matches.opt_str("frequency").expect("Error: Filename parameter")
+    filename = matches.opt_str("out-file").expect("Error: Filename parameter")
                       .parse().ok().expect("Error: Filename parameter");
 
     if (runtime > 0.0) && (freq > 0.0) {

@@ -95,7 +95,7 @@ impl Default for DataChunk<F32Sample> {
     /// Include DATA marker and a new Vec<F32Samples>.
     fn default() -> DataChunk<F32Sample> {
         DataChunk {
-            data_header: [b'D', b'A', b'T', b'A'],
+            data_header: [b'd', b'a', b't', b'a'],
             size_data: 0,
             sample_vector: Vec::new(),
             read_cur: 0,

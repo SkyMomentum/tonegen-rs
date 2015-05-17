@@ -1,7 +1,7 @@
 [package]
 
 name = "Tone Generator"
-version = "0.1.0"
+version = "0.2.0"
 authors = [ "Ryan Drew <rsdrew@gmail.com>" ]
 
 [[bin]]
