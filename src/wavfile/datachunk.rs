@@ -24,7 +24,7 @@ impl Read for DataChunk<F32Sample> {
         // Temporary buffer for transmuting F32Sample, and u32 header size component.
         let mut tmb: [u8; 4] = [0; 4];
         let mut off: usize = 0;
-        // number of writed bytes in transmute macro, but not used here anymore due to an early
+        // number of writen bytes in transmute macro, but not used here anymore due to an early
         // rewrite on learning that the size of the data chunk exceeds the &buf sent by copy() 
         // which is 64k on my machine. Param still used at other two macro use sites.
         let mut x: usize = 0;

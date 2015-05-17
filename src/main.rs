@@ -17,11 +17,10 @@ mod options;
 
 fn main() {
 
-
     let opts = options::setup_options();
-    //let matches = options::get_matches(&opts).clone();
     let args: Vec<String> = env::args().collect();
     let exec_name = env::args().nth(0).unwrap();
+    
     let matches_result = opts.parse(&args[1..]);
     let matches = match matches_result {
         Ok(m) => { m }
@@ -29,7 +28,7 @@ fn main() {
                 println!("Error: {}", e.to_string());
                 options::print_help(&opts, &exec_name );
                 return; 
-            }
+        }
     };
 
     if matches.opt_present("h") {
@@ -37,12 +36,12 @@ fn main() {
         return;
     }
 
-    let runtime: f64 =  matches.opt_str("length").expect("Error: length parameter")
-                      .parse().ok().expect("Error: length parameter");
+    let runtime: f64 = matches.opt_str("length").expect("Error: length parameter")
+                              .parse().ok().expect("Error: length parameter");
     let freq: f64 = matches.opt_str("frequency").expect("Error: frequency parameter")
-                  .parse().ok().expect("Error: frequency parameter");
+                           .parse().ok().expect("Error: frequency parameter");
     let filename: String = matches.opt_str("out-file").expect("Error: Filename parameter")
-                      .parse().ok().expect("Error: Filename parameter");
+                                  .parse().ok().expect("Error: Filename parameter");
 
     if (runtime > 0.0) && (freq > 0.0) {
         let tone = generate_tone_f32(runtime, freq, 44100);
