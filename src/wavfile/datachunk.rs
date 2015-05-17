@@ -155,7 +155,7 @@ mod tests {
         let payload = [0.0f32, 0.1f32, 0.2f32, 0.3f32, 0.4f32, 0.5f32];
         let mut expected: [u8; 32] = [0;32];
         let mut x: usize = 4;
-        expected[0] = b'D'; expected[1] = b'A'; expected[2] = b'T'; expected[3] = b'A';
+        expected[0] = b'd'; expected[1] = b'a'; expected[2] = b't'; expected[3] = b'a';
         do_transmute!(u32_to_u8, 24, &mut expected, &mut x, 4);
         for j in payload.iter() {
             do_transmute!(f32_to_u8, *j, &mut expected, &mut x, 4);
