@@ -53,6 +53,8 @@ fn main() {
         let _ = copy( &mut wav.format_chunk, &mut f);
         let _ = copy( &mut wav.data, &mut f);
         let _ = f.sync_all();
+    } else {
+        println!("Please enter sane values for parameters.")
     }
 
 }
