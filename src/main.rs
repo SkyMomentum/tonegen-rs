@@ -37,13 +37,11 @@ fn main() {
         return;
     }
 
-    let mut filename = String::new();
-
-    let mut runtime: f64 =  matches.opt_str("length").expect("Error: length parameter")
+    let runtime: f64 =  matches.opt_str("length").expect("Error: length parameter")
                       .parse().ok().expect("Error: length parameter");
-    let mut freq: f64 = matches.opt_str("frequency").expect("Error: frequency parameter")
+    let freq: f64 = matches.opt_str("frequency").expect("Error: frequency parameter")
                   .parse().ok().expect("Error: frequency parameter");
-    filename = matches.opt_str("out-file").expect("Error: Filename parameter")
+    let filename: String = matches.opt_str("out-file").expect("Error: Filename parameter")
                       .parse().ok().expect("Error: Filename parameter");
 
     if (runtime > 0.0) && (freq > 0.0) {
@@ -55,7 +53,7 @@ fn main() {
         let _ = copy( &mut wav.header, &mut f);
         let _ = copy( &mut wav.format_chunk, &mut f);
         let _ = copy( &mut wav.data, &mut f);
-        f.sync_all();
+        let _ = f.sync_all();
     }
 
 }
