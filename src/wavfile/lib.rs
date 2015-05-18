@@ -26,8 +26,6 @@ pub struct Wav<T> {
 /// Alias for only currently supported sample type.
 pub type F32Sample = f32;
 
-//-------------------------------------------------
-
 impl Wav<F32Sample> {
     /// Helper to create a new Wav of F32Samples.
     pub fn create_new( hdr: WavHeader, fmt: FormatChunk, data_in: DataChunk<F32Sample>) -> Wav<F32Sample> {

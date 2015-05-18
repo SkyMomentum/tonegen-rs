@@ -19,7 +19,6 @@ pub fn create_sine_sample(frequency: f64, sample_rate: f64) -> Vec<f32> {
     tone_cycle
 }
 
-
 /// Create a data chunk with specified run length, frequency, and sample details.
 ///
 /// Current support functions only provide 32bit sample size.

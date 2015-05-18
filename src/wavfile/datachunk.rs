@@ -28,10 +28,10 @@ impl Read for DataChunk<F32Sample> {
         // rewrite on learning that the size of the data chunk exceeds the &buf sent by copy() 
         // which is 64k on my machine. Param still used at other two macro use sites.
         let mut x: usize = 0;
-        
+
         // Send EOF if we've sent everything.
         if self.read_cur >= out_size { return Ok(0); }
-        
+
         // Sanity check, space at least for chunk header.
         if buf.len() > 8 {
             // if we're starting the copy()
@@ -45,7 +45,7 @@ impl Read for DataChunk<F32Sample> {
                 do_transmute!(u32_to_u8, self.size_data, &mut tmb, &mut x, 4);
                 off = off + append_bytes(&tmb, buf, off);
             }
-            
+
             // Split the Vec<F32Sample> of data at the read_cur position. 
             let (_, work_slice) = self.sample_vector.split_at( self.read_cur / 4 );
 

@@ -21,7 +21,3 @@ pub fn print_help(opts: &Options, name: &str) {
     let brief = format!("USE: {} [options]", name);
     print!("{}", opts.usage(&brief));
 }
-
-/*pub fn check_required_args(matches: &Matches) -> bool {
-    matches.opt_present("f") && matches.opt_present("l") && matches.opt_present("o")
-}*/

@@ -1,4 +1,3 @@
-
 /// Transmute and copy to u8 array.
 ///
 /// # Unsafe
