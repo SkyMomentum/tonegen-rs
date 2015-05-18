@@ -9,7 +9,7 @@ pub fn setup_options() -> Options {
         .reqopt("l", "length", "Run length of generated wav.", "SECS")
         .reqopt("o", "out-file", "File name to write the wav file to", "FILE")
         .optflag("t", "tone", "Generate sine tone, default.")
-        //.optflag("k", "karplus-strong", "Generate a karplus strong sample from single pluck.")
+        .optflag("k", "karplus-strong", "Generate a karplus strong sample from single pluck.")
         .optflag("h", "help", "Print this help.");
     opts
 }

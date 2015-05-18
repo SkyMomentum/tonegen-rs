@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use rand;
 
 pub struct KarplusStrong {

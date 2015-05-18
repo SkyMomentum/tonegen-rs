@@ -10,17 +10,17 @@ use wavfile::{create_mono_wav, create_mono_datachunk};
 //use wavfile::F32Sample;
 
 mod synth;
-//use synth::ksstring::KarplusStrong;
+use synth::ksstring::generate_one_pluck_sample;
 use synth::tone::generate_tone_f32;
 
 mod options;
 
 fn main() {
-
+    let sample_rate = 44100.0;
     let opts = options::setup_options();
     let args: Vec<String> = env::args().collect();
 
-    let dir_sep =  if cfg!(target_family = "windows") {
+    let dir_sep = if cfg!(target_family = "windows") {
         "\\"
     } else {
         "/"
@@ -51,8 +51,14 @@ fn main() {
     let filename: String = matches.opt_str("out-file").expect("Error: Filename parameter");
 
     if (runtime > 0.0) && (freq > 0.0) {
-        let tone = generate_tone_f32(runtime, freq, 44100);
-        let dc = create_mono_datachunk(tone);
+        let dc = if matches.opt_present("k") {
+            let kspluck = generate_one_pluck_sample(runtime, freq, sample_rate);
+            create_mono_datachunk(kspluck)
+        } else {
+            let tone = generate_tone_f32(runtime, freq, sample_rate);
+            create_mono_datachunk(tone)
+        };
+        
         let mut wav = create_mono_wav(dc, 44100, 32);
 
         let mut f = File::create(filename).unwrap();
