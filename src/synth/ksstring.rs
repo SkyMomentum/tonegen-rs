@@ -103,6 +103,7 @@ impl KarplusStrong {
     }
 }
 
+/// Make a sample based on a single puck on a Karplus-Strong simulated string instrument.
 pub fn generate_one_pluck_sample(run_length: f64, frequency: f64, sample_rate: f64) -> Vec<f32> {
     let mut ks: KarplusStrong = KarplusStrong::with_frequency(frequency, sample_rate);
 
@@ -115,6 +116,29 @@ pub fn generate_one_pluck_sample(run_length: f64, frequency: f64, sample_rate: f
         ks.tick_simulation();
         if i > num_samples { break; }
         let samp = ks.sample();
+        out_vec.push( samp );
+        i = i + 1;
+    }
+
+    out_vec
+}
+
+/// Create a sample that plucks on Karplus-Strong whenever the sample is below threshold. 
+pub fn generate_ks_threshold(run_length: f64, frequency: f64, sample_rate: f64, thresh: f64) -> Vec<f32> {
+    let mut ks: KarplusStrong = KarplusStrong::with_frequency(frequency, sample_rate);
+
+    ks.pluck();
+
+    let num_samples: u32 = (sample_rate * run_length).round() as u32;
+    let mut out_vec: Vec<f32> = Vec::with_capacity(num_samples as usize);
+    let mut i = 0;
+    loop {
+        ks.tick_simulation();
+        if i > num_samples { break; }
+        let samp = ks.sample();
+        if samp < thresh as f32 {
+            ks.pluck();
+        }
         out_vec.push( samp );
         i = i + 1;
     }
