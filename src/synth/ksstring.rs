@@ -31,7 +31,7 @@ impl KarplusStrong {
             ring_first: 0,
             ring_last: size,
             ring_size: size,
-            sample_rate: 44100.0f64,
+            sample_rate: sample_rate,
             frequency: freq,
             ticks: 0,
         };
@@ -114,7 +114,8 @@ pub fn generate_one_pluck_sample(run_length: f64, frequency: f64, sample_rate: f
     loop {
         ks.tick_simulation();
         if i > num_samples { break; }
-        out_vec.push( ks.sample() );
+        let samp = ks.sample();
+        out_vec.push( samp );
         i = i + 1;
     }
     out_vec
