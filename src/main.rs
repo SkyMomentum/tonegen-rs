@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+//[allow(dead_code)]
 extern crate wavfile;
 extern crate rand;
 
@@ -19,7 +19,15 @@ fn main() {
 
     let opts = options::setup_options();
     let args: Vec<String> = env::args().collect();
-    let exec_name = env::args().nth(0).unwrap();
+
+    let dir_sep =  if cfg!(target_family = "windows") {
+        "\\"
+    } else {
+        "/"
+    };
+    
+    let arg_zero = env::args().nth(0).unwrap();
+    let exec_name = arg_zero.split(dir_sep).last().unwrap();
     
     let matches_result = opts.parse(&args[1..]);
     let matches = match matches_result {
@@ -40,8 +48,7 @@ fn main() {
                               .parse().ok().expect("Error: length parameter");
     let freq: f64 = matches.opt_str("frequency").expect("Error: frequency parameter")
                            .parse().ok().expect("Error: frequency parameter");
-    let filename: String = matches.opt_str("out-file").expect("Error: Filename parameter")
-                                  .parse().ok().expect("Error: Filename parameter");
+    let filename: String = matches.opt_str("out-file").expect("Error: Filename parameter");
 
     if (runtime > 0.0) && (freq > 0.0) {
         let tone = generate_tone_f32(runtime, freq, 44100);
