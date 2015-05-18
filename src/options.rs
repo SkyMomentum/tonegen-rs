@@ -1,6 +1,6 @@
 extern crate getopts;
 
-use self::getopts::{Options, Matches};
+use self::getopts::Options;
 
 pub fn setup_options() -> Options {
     let mut opts = Options::new();
@@ -19,6 +19,6 @@ pub fn print_help(opts: &Options, name: &str) {
     print!("{}", opts.usage(&brief));
 }
 
-pub fn check_required_args(matches: &Matches) -> bool {
+/*pub fn check_required_args(matches: &Matches) -> bool {
     matches.opt_present("f") && matches.opt_present("l") && matches.opt_present("o")
-}
+}*/

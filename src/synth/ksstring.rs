@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use rand;
 
 pub struct KarplusStrong {
@@ -72,7 +74,7 @@ impl KarplusStrong {
         }
 
     }
-    
+
     pub fn sample(&mut self) -> f32 {
         *self.ring.get(self.ring_first).unwrap()
     }
@@ -105,9 +107,9 @@ impl KarplusStrong {
 
 pub fn generate_one_pluck_sample(run_length: f64, frequency: f64, sample_rate: f64) -> Vec<f32> {
     let mut ks: KarplusStrong = KarplusStrong::with_frequency(frequency, sample_rate);
-    
+
     ks.pluck();
-    
+
     let num_samples: u32 = (sample_rate * run_length).round() as u32;
     let mut out_vec: Vec<f32> = Vec::with_capacity(num_samples as usize);
     let mut i = 0;
