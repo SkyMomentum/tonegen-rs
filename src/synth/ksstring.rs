@@ -118,5 +118,6 @@ pub fn generate_one_pluck_sample(run_length: f64, frequency: f64, sample_rate: f
         out_vec.push( samp );
         i = i + 1;
     }
+
     out_vec
 }

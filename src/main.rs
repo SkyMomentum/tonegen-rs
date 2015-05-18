@@ -6,7 +6,7 @@ use std::env;
 use std::fs::File;
 use std::io::copy;
 
-use wavfile::{create_mono_wav, create_mono_datachunk};
+use wavfile::{create_wav, create_mono_datachunk, create_stereo_datachunk};
 //use wavfile::F32Sample;
 
 mod synth;
@@ -51,15 +51,31 @@ fn main() {
     let filename: String = matches.opt_str("out-file").expect("Error: Filename parameter");
 
     if (runtime > 0.0) && (freq > 0.0) {
-        let dc = if matches.opt_present("k") {
-            let kspluck = generate_one_pluck_sample(runtime, freq, sample_rate);
-            create_mono_datachunk(kspluck)
+        let stereo = matches.opt_present("stereo");
+
+        let chan_one = if matches.opt_present("k") {
+            generate_one_pluck_sample(runtime, freq, sample_rate)
         } else {
-            let tone = generate_tone_f32(runtime, freq, sample_rate);
-            create_mono_datachunk(tone)
+            generate_tone_f32(runtime, freq, sample_rate)
         };
+
+        let mut chan_two: Vec<f32> = Vec::new();
         
-        let mut wav = create_mono_wav(dc, 44100, 32);
+        if stereo {
+            chan_two = if matches.opt_present("k") {
+                generate_one_pluck_sample(runtime, freq, sample_rate)
+            } else {
+                generate_tone_f32(runtime, freq, sample_rate)
+            };
+        }
+        
+        let dc = if stereo {
+            create_stereo_datachunk(chan_one, chan_two)
+        } else {
+            create_mono_datachunk(chan_one)
+        };
+
+        let mut wav = create_wav(dc, 44100, 32);
 
         let mut f = File::create(filename).unwrap();
         let _ = copy( &mut wav.header, &mut f);
