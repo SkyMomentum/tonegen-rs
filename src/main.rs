@@ -10,7 +10,7 @@ use wavfile::{create_wav, create_mono_datachunk, create_stereo_datachunk};
 //use wavfile::F32Sample;
 
 mod synth;
-use synth::ksstring::generate_one_pluck_sample;
+use synth::ksstring::{generate_one_pluck_sample, generate_ks_threshold};
 use synth::tone::generate_tone_f32;
 
 mod options;
@@ -63,7 +63,13 @@ fn main() {
         
         if stereo {
             chan_two = if matches.opt_present("k") {
-                generate_one_pluck_sample(runtime, freq, sample_rate)
+                if matches.opt_present("r") {
+                    let thresh: f64 = matches.opt_str("r").unwrap()
+                                      .parse().ok().expect("Could not parse THRESHOLD");
+                    generate_ks_threshold(runtime, freq, sample_rate, thresh)
+                } else {
+                    generate_one_pluck_sample(runtime, freq, sample_rate)
+                }
             } else {
                 generate_tone_f32(runtime, freq, sample_rate)
             };

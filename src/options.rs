@@ -11,7 +11,9 @@ pub fn setup_options() -> Options {
         .optflag("t", "tone", "Generate sine tone, default.")
         .optflag("k", "karplus-strong", "Generate a karplus strong sample from single pluck.")
         .optflag("s", "stereo", "Make a stereo .wav file")
-        .optflag("h", "help", "Print this help.");
+        .optflag("h", "help", "Print this help.")
+        .optflagopt("r", "repeat",
+                    "Repeat the karplus-strong pluck when sample is below threshold", "THRESHOLD");
     opts
 }
 
