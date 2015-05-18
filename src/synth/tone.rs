@@ -1,10 +1,9 @@
 use std::f64::consts;
 
 /// Fill a Vec<> with a single cycle at frequency and sample rate.
-pub fn create_sine_sample(frequency: f64, sample_rate: u32) -> Vec<f32> {
+pub fn create_sine_sample(frequency: f64, sample_rate: f64) -> Vec<f32> {
 
-    let sr: f64 = sample_rate as f64;
-    let samples_sine: f64 = sr / frequency;
+    let samples_sine: f64 = sample_rate / frequency;
     let samples_num: u32 = samples_sine.floor() as u32;
     let half_wave: f64 = samples_sine / 2.0f64;
     
@@ -24,7 +23,7 @@ pub fn create_sine_sample(frequency: f64, sample_rate: u32) -> Vec<f32> {
 /// Create a data chunk with specified run length, frequency, and sample details.
 ///
 /// Current support functions only provide 32bit sample size.
-pub fn generate_tone_f32(run_length: f64, frequency: f64, sample_rate: u32) -> Vec<f32> {
+pub fn generate_tone_f32(run_length: f64, frequency: f64, sample_rate: f64) -> Vec<f32> {
 
     let mut tone_out: Vec<f32> = Vec::new();
 
