@@ -54,7 +54,13 @@ fn main() {
         let stereo = matches.opt_present("stereo");
 
         let chan_one = if matches.opt_present("k") {
-            generate_one_pluck_sample(runtime, freq, sample_rate)
+            if matches.opt_present("r") {
+                let thresh: f64 = matches.opt_str("r").unwrap()
+                                  .parse().ok().expect("Could not parse THRESHOLD");
+                generate_ks_threshold(runtime, freq, sample_rate, thresh)
+            } else {
+                generate_one_pluck_sample(runtime, freq, sample_rate)
+            }
         } else {
             generate_tone_f32(runtime, freq, sample_rate)
         };
@@ -62,17 +68,7 @@ fn main() {
         let mut chan_two: Vec<f32> = Vec::new();
         
         if stereo {
-            chan_two = if matches.opt_present("k") {
-                if matches.opt_present("r") {
-                    let thresh: f64 = matches.opt_str("r").unwrap()
-                                      .parse().ok().expect("Could not parse THRESHOLD");
-                    generate_ks_threshold(runtime, freq, sample_rate, thresh)
-                } else {
-                    generate_one_pluck_sample(runtime, freq, sample_rate)
-                }
-            } else {
-                generate_tone_f32(runtime, freq, sample_rate)
-            };
+            chan_two = chan_one.clone()
         }
         
         let dc = if stereo {

@@ -103,6 +103,7 @@ impl Default for DataChunk<F32Sample> {
     }
 }
 
+//Take a Vec of samples and return a DataChunk
 pub fn create_mono_datachunk(data: Vec<F32Sample>) -> DataChunk<F32Sample>{
     let mut dc: DataChunk<F32Sample> = Default::default();
     
@@ -118,6 +119,7 @@ pub fn create_mono_datachunk(data: Vec<F32Sample>) -> DataChunk<F32Sample>{
     dc
 }
 
+//Take two Vec and return a DataChunk, in stereo!
 pub fn create_stereo_datachunk(one: Vec<F32Sample>, two: Vec<F32Sample>) -> DataChunk<F32Sample> {
     use std::iter::Iterator;
     
