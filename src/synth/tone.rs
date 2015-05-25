@@ -48,11 +48,15 @@ pub fn generate_tone_f32(run_length: f64, frequency: f64, sample_rate: f64) -> V
 pub fn generate_tone_u8(run_length: f64, frequency: f64, sample_rate: f64) -> Vec<u8> {
 
     let mut tone_out: Vec<u8> = Vec::new();
-    
+
     let tone_cycle: Vec<f32> = create_sine_sample(frequency, sample_rate);
     let cycle_len: usize = tone_cycle.len();
     
-    let scaled_tone_cycle: Vec<u8>;
+    let mut scaled_tone_cycle: Vec<u8> =  Vec::new();
+    for s in tone_cycle {
+        let scaled_sample: u8 = (s * 256.0).round() as u8;
+        scaled_tone_cycle.push( scaled_sample );
+    }
     
     let total_samples: u32 = ((run_length * sample_rate).floor()) as u32;
 
@@ -62,7 +66,7 @@ pub fn generate_tone_u8(run_length: f64, frequency: f64, sample_rate: f64) -> Ve
     loop {
         if out_counter > total_samples { break; }
         if cycle_index >= cycle_len { cycle_index = 0; }
-        //tone_out.push( *(tone_cycle.get(cycle_index).unwrap()) );
+        tone_out.push( *(scaled_tone_cycle.get(cycle_index).unwrap()) );
         out_counter = out_counter + 1;
         cycle_index = cycle_index + 1;
     }
