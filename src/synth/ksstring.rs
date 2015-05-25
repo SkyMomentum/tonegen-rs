@@ -94,13 +94,13 @@ impl KarplusStrong {
         self.ticks = self.ticks + 1;
     }
 
-    pub fn get_ticks(&mut self) -> u64 {
-        self.ticks
-    }
-
-    pub fn get_ring_size(&self) -> usize {
-        self.ring_size
-    }
+//    pub fn get_ticks(&mut self) -> u64 {
+//        self.ticks
+//    }
+//
+//    pub fn get_ring_size(&self) -> usize {
+//        self.ring_size
+//    }
 }
 
 /// Make a sample based on a single puck on a Karplus-Strong simulated string instrument.
