@@ -54,7 +54,7 @@ pub fn generate_tone_u8(run_length: f64, frequency: f64, sample_rate: f64) -> Ve
     
     let mut scaled_tone_cycle: Vec<u8> =  Vec::new();
     for s in tone_cycle {
-        let scaled_sample: u8 = (s * 256.0).round() as u8;
+        let scaled_sample: u8 = ((s + 0.5f64) * 256.0).round() as u8;
         scaled_tone_cycle.push( scaled_sample );
     }
     
