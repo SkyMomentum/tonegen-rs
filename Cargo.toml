@@ -7,6 +7,7 @@ authors = [ "Ryan Drew <rsdrew@gmail.com>" ]
 [[bin]]
 
 name = "tonegen"
+path = "src/main.rs"
 
 [dependencies.wavfile]
 path = "src/wavfile"
