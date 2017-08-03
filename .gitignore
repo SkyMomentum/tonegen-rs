@@ -2,4 +2,7 @@
 **/*.rs.bk
 Cargo.lock
 *.swp
+<<<<<<< HEAD
 /src/wavfile/target/
+=======
+>>>>>>> 90774cac7136ca8696ac30b1c2c8f43ad787a8c7
