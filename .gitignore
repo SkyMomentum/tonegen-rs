@@ -3,4 +3,3 @@
 Cargo.lock
 *.swp
 /src/wavfile/target/
- 
