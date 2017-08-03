@@ -19,6 +19,26 @@ pub fn create_sine_sample(frequency: f64, sample_rate: f64) -> Vec<f32> {
     tone_cycle
 }
 
+// TODO: generalize for saw, square waves.
+pub fn create_rampwave_sample(frequency: f64, sample_rate: f64) -> Vec<f32> {
+    let samples_cycle: f64 = sample_rate / frequency;
+    let samples_num: u32 = samples_cycle.floor() as u32;
+    let half_cycle: f64 = samples_cycle / 2.0f64;
+
+    let mut step_cycle: Vec<f32> = Vec::with_capacity(samples_num as usize);
+    let step_step: f64 = 1.0f64 / samples_cycle;
+
+    for i in 0..samples_num {
+        let x: f64 = i as f64;
+        let val_calc: f64 = step_step * x;
+        let val_out: f32 = val_calc as f32;
+        step_cycle.push(val_out);
+    }
+
+    step_cycle
+
+}
+
 /// Create a data chunk with specified run length, frequency, and sample details.
 ///
 /// Current support functions only provide 32bit sample size.
