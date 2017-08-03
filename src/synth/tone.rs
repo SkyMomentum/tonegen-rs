@@ -19,10 +19,7 @@ pub fn create_sine_sample(frequency: f64, sample_rate: f64) -> Vec<f32> {
     tone_cycle
 }
 
-<<<<<<< HEAD
 // TODO: generalize for saw, square waves.
-=======
->>>>>>> 57857fb41b734d74ba1377ee23f9c443f68b3d9b
 pub fn create_rampwave_sample(frequency: f64, sample_rate: f64) -> Vec<f32> {
     let samples_cycle: f64 = sample_rate / frequency;
     let samples_num: u32 = samples_cycle.floor() as u32;
